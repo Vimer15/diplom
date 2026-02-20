@@ -1,22 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-// Способ 1: Прямой импорт (если файл точно есть)
 import AuthPage from '../Views/authorizationView.vue'
 import registration from '../Views/registrationView.vue'
 import profile from '../Views/progileView.vue'
 import torgiPageView from '../Views/torgiPageView.vue'
-import historyView from '../Views/historyView.vue'
-import settingView from '../Views/settingView.vue'
-
+import Setting from '../Views/SettungView.vue'
+import putting_up_for_auction_View from '../Views/putting_up_for_auction_View.vue'
+import сonfidentialityView from '../Views/сonfidentialityView.vue'
+import usage_rulesView from '../Views/usage_rulesView.vue'
 
 
 const routes = [
   {
+    // Сделан визуал
     path: '/',
     name: 'auth',
     component: AuthPage
   },
   {
+    //Сделан визуал
     path: '/reg',
     name: 'Reg',
     component: registration
@@ -32,15 +34,28 @@ const routes = [
     component: torgiPageView
   },
   {
-    path: '/hist',
-    name: 'Hist',
-    component: historyView
+    path: '/setting',
+    name: 'set',
+    component: Setting
   },
   {
-    path: '/setting',
-    name: 'Setting',
-    component: settingView
+    path: '/auction',
+    name: 'Auction',
+    component: putting_up_for_auction_View
+  },
+  {
+    //Сделан визуал
+    path: '/confident',
+    name: "Confident",
+    component: сonfidentialityView
+  },
+  {
+    //Сделан визуал
+    path: '/info',
+    name: 'Info',
+    component: usage_rulesView
   }
+
 
 ]
 

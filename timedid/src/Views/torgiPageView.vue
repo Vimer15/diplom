@@ -23,6 +23,9 @@
         <div class="page-header">
           <h1 class="page-title">Активные торги</h1>
           <router-link to="/profile" class="back-button">
+            <i class="bt_create_torg"></i> Создать приложение
+          </router-link>
+          <router-link to="/" class="back-button">
             <i class="fas fa-arrow-left"></i> Вернуться в профиль
           </router-link>
         </div>
@@ -489,7 +492,6 @@ body {
   padding-bottom: 20px;
   border-bottom: 2px solid #e1e5eb;
 }
-
 .page-title {
   font-size: 32px;
   font-weight: 800;
@@ -645,6 +647,10 @@ body {
 
 .auction-card:hover::before {
   opacity: 1;
+}
+
+.bt_create_torg i{
+  color: green;
 }
 
 /* Изображение */

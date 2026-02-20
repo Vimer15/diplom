@@ -11,9 +11,6 @@
                         <div class="tagline">Ваша ставка — финальная</div>
                     </div>
                 </a>
-                <div class="user-info">
-                    <span style="color: #495057; font-weight: 500;">Иванов И.И.</span>
-                </div>
             </div>
         </div>
     </header>
@@ -24,8 +21,8 @@
             <!-- Боковая панель -->
             <aside class="sidebar">
                 <div class="profile-card">
-                    <div class="avatar">ИИ</div>
-                    <div class="user-name">Иванов Иван Иванович</div>
+                    <div class="avatar">КР</div>
+                    <div class="user-name">Кушхов Руслан Алимович</div>
                     <div class="user-wallet">
                         <span class="wallet-number">Здесь будет адрес кошелька</span>
                         <button class="wallet-toggle" title="Скрыть/показать">
@@ -42,20 +39,20 @@
                                 Профиль
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" @click="goToTorg">
                             <a href="#" class="nav-link">
                                 <i class="fas fa-gavel nav-icon"></i>
                                 Активные торги
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link" >
                                 <i class="fas fa-history nav-icon"></i>
                                 История ставок
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link" @click="GoToSetting()">
                                 <i class="fas fa-cog nav-icon"></i>
                                 Настройки
                             </a>
@@ -163,19 +160,6 @@
                         </tr>
                     </tbody>
                 </table>
-
-                <!-- Если нет активных торгов -->
-                <!-- <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-gavel"></i>
-                    </div>
-                    <div class="empty-text">
-                        У вас пока нет активных торгов
-                    </div>
-                    <a href="#" class="btn">
-                        <i class="fas fa-search"></i> Найти лоты
-                    </a>
-                </div> -->
             </main>
         </div>
     </div>
@@ -183,17 +167,28 @@
     <!-- Футер -->
     <footer class="footer">
         <div class="container">
-            <p>© 2023 Timedid. Все права защищены. Торгуйте ответственно.</p>
+            <p>Timedid - заботиться о вашем времени</p>
             <p style="margin-top: 8px; font-size: 12px;">
-                <a href="#" style="color: #6c757d; text-decoration: none; margin: 0 10px;">Правила использования</a> |
-                <a href="#" style="color: #6c757d; text-decoration: none; margin: 0 10px;">Конфиденциальность</a> |
-                <a href="#" style="color: #6c757d; text-decoration: none; margin: 0 10px;">Поддержка</a>
+                <router-link to="/info" style="color: #6c757d; text-decoration: none; margin: 0 10px;">Правила использования</router-link> |
+                <router-link to="/confident" style="color: #6c757d; text-decoration: none; margin: 0 10px;">Конфиденциальность</router-link> 
             </p>
         </div>
     </footer>
 
 </template>
 
+<script>
+export default {
+    methods: {
+        goToTorg() {
+            window.location.href = '/torg';
+        },
+        GoToSetting(){
+            this.$router.push('/setting')
+        }
+    }
+}
+</script>
 <style>
 /* Базовые стили */
 * {
@@ -216,16 +211,7 @@ body {
     padding: 0 20px;
 }
 
-/* Шапка */
-.header {
-    background: #ffffff;
-    border-bottom: 1px solid #e9ecef;
-    padding: 18px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
+
 
 .header-content {
     display: flex;
@@ -264,11 +250,11 @@ body {
 
 /* Боковая панель */
 .sidebar {
-    width: 250px;
+    width: 400px;
     flex-shrink: 0;
     background: #ffffff;
     border-radius: 12px;
-    padding: 25px;
+    padding: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     border: 1px solid #e9ecef;
     height: fit-content;
@@ -404,6 +390,7 @@ body {
     margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 1px solid #e9ecef;
+    border-radius: 20;
 }
 
 .panel-title {

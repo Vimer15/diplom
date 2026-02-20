@@ -1,63 +1,166 @@
 <template>
-<div>
-        <div class="main-wrapper">
-        <!-- Левая часть -->
-        <div class="welcome-side">
-            <div class="logo">
-                <i class="fas fa-stopwatch logo-icon"></i>
-                <div>
-                    Timedid
-                    
-                </div>
-            </div>
-            
-            <h1 class="welcome-title">Всё решает последняя секунда</h1>
-            <p class="welcome-text">
-                Timedid — уникальные торги, где товар уходит последней ставке по истечении времени.
-            </p>
-            
-            <ul class="features">
-                <li><i class="fas fa-bolt feature-icon"></i> Торги с обратным отсчетом</li>
-                <li><i class="fas fa-trophy feature-icon"></i> Побеждает последняя ставка</li>
-                <li><i class="fas fa-shield-alt feature-icon"></i> Безопасные сделки</li>
-                <li><i class="fas fa-users feature-icon"></i> Прямые переговоры</li>
-            </ul>
+  <div>
+    <div class="main-wrapper">
+      <!-- Левая часть - WELCOME SIDE (ВЕРНУЛ ПОЛНОСТЬЮ) -->
+      <div class="welcome-side">
+        <div class="logo">
+          <i class="fas fa-stopwatch logo-icon"></i>
+          <div>
+            Timedid
+          </div>
         </div>
         
-        <!-- Правая часть -->
-        <div class="auth-side">
-            <h2 class="auth-title">Авторизация</h2>
-            
-            <div class="input-group">
-                <label class="input-label">Электронная почта</label>
-                <input type="email" class="input-field" placeholder="email@timedid.ru">
-            </div>
-            
-            <div class="input-group">
-                <label class="input-label">Пароль</label>
-                <input type="password" class="input-field" placeholder="Ваш пароль">
-            </div>
-            
-            <div class="buttons-group">
-                <button class="btn btn-primary enterMain">
-                    <i class="fas fa-sign-in-alt"></i> Войти в аккаунт
-                </button>
-                <button class="btn btn-secondary enterRegistration">
-                    <i class="fas fa-user-plus"></i> Создать аккаунт
-                </button>
-            </div>
-            
-            <div class="auth-links">
-                <a href="#"><i class="fas fa-key"></i> Забыли пароль?</a>
-                <span class="divider">|</span>
-                <a href="#"><i class="fas fa-info-circle"></i> Помощь</a>
-            </div>
+        <h1 class="welcome-title">Всё решает последняя секунда</h1>
+        <p class="welcome-text">
+          Timedid — уникальные торги, где товар уходит последней ставке по истечении времени.
+        </p>
+        
+        <ul class="features">
+          <li><i class="fas fa-bolt feature-icon"></i> Торги с обратным отсчетом</li>
+          <li><i class="fas fa-trophy feature-icon"></i> Побеждает последняя ставка</li>
+          <li><i class="fas fa-shield-alt feature-icon"></i> Безопасные сделки</li>
+          <li><i class="fas fa-users feature-icon"></i> Прямые переговоры</li>
+        </ul>
+      </div>
+      
+      <!-- Правая часть - AUTH SIDE -->
+      <div class="auth-side">
+        <h2 class="auth-title">Авторизация</h2>
+        
+        <div class="input-group">
+          <label class="input-label">Электронная почта</label>
+          <input 
+            type="email" 
+            class="input-field" 
+            placeholder="email@timedid.ru"
+            v-model="authData.email"
+            @keyup.enter="handleAuthorization"
+          >
         </div>
+        
+        <div class="input-group">
+          <label class="input-label">Пароль</label>
+          <input 
+            type="password" 
+            class="input-field" 
+            placeholder="Ваш пароль"
+            v-model="authData.password"
+            @keyup.enter="handleAuthorization"
+          >
+        </div>
+        
+        <div class="buttons-group">
+          <button 
+            class="btn btn-primary enterMain" 
+            @click="handleAuthorization"
+            :disabled="isLoading"
+          >
+            <i class="fas fa-sign-in-alt"></i> 
+            {{ isLoading ? 'Вход...' : 'Войти в аккаунт' }}
+          </button>
+          <button 
+            class="btn btn-secondary enterRegistration" 
+            @click="goToRegistration"
+          >
+            <i class="fas fa-user-plus"></i> Создать аккаунт
+          </button>
+        </div>
+        
+        <!-- Сообщение об ошибке -->
+        <div v-if="errorMessage" class="error-message">
+          <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+        </div>
+        
+        <div class="auth-links">
+          <a href="#" @click.prevent="forgotPassword">
+            <i class="fas fa-key"></i> Забыли пароль?
+          </a>
+          <span class="divider">|</span>
+          <a href="#" @click.prevent="help">
+            <i class="fas fa-info-circle"></i> Помощь
+          </a>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 </template>
-<style>
 
+<script>
+import axios from 'axios'
+
+export default {
+  name: 'AuthorizationView',
+  data() {
+    return {
+      authData: {
+        email: '',
+        password: ''
+      },
+      isLoading: false,
+      errorMessage: ''
+    }
+  },
+  methods: {
+    async handleAuthorization() {
+      // Валидация
+      if (!this.authData.email || !this.authData.password) {
+        this.errorMessage = 'Заполните все поля'
+        return
+      }
+
+      this.isLoading = true
+      this.errorMessage = ''
+
+      try {
+        // Отправка запроса на авторизацию
+        const response = await axios.post('http://localhost:5006/api/User_/Authorization', {
+          email: this.authData.email,
+          password: this.authData.password
+        })
+
+        // Успешная авторизация
+        if (response.status === 200) {
+          // Сохраняем данные пользователя
+          localStorage.setItem('user', JSON.stringify(response.data.user))
+          localStorage.setItem('token', Date.now().toString())
+          
+          // Перенаправляем на профиль
+          this.$router.push('/prof')
+        }
+      } catch (error) {
+        // Обработка ошибок
+        if (error.response) {
+          this.errorMessage = error.response.data || 'Неверный логин или пароль'
+        } else if (error.request) {
+          this.errorMessage = 'Сервер недоступен. Попробуйте позже'
+        } else {
+          this.errorMessage = 'Произошла ошибка при авторизации'
+        }
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    goToRegistration() {
+      this.$router.push('/reg')
+    },
+
+    // toGoCreateAccount(){
+    //    this.$router.push('/reg')
+    // },
+
+    forgotPassword() {
+      this.$router.push('/forgot-password')
+    },
+
+    help() {
+      this.$router.push('/help')
+    }
+  }
+}
+</script>
+
+<style>
 /* Базовые стили */
 * {
     margin: 0;
@@ -244,6 +347,12 @@ body {
     box-shadow: 0 8px 20px rgba(33, 37, 41, 0.15);
 }
 
+.btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .btn-secondary {
     background: transparent;
     color: #495057;
@@ -278,6 +387,22 @@ body {
 .divider {
     color: #adb5bd;
     margin: 0 8px;
+}
+
+/* Сообщение об ошибке */
+.error-message {
+    margin-top: 20px;
+    padding: 12px;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 10px;
+    color: #721c24;
+    font-size: 14px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 /* Адаптив */
